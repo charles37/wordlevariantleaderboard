@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tradle Leaderboard</title>
+    <style>
+        /* Add your CSS styling here */
+    </style>
+</head>
+<body>
+    <h1>Tradle Leaderboard</h1>
+
+    <!-- Score Submission Form -->
+    <section>
+        <h2>Submit Your Score</h2>
+        <form id="scoreForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="text" id="score" placeholder="Your Score" required>
+            <button type="submit">Submit Score</button>
+        </form>
+    </section>
+
+    <!-- Leaderboards -->
+    <section>
+        <h2>Leaderboards</h2>
+
+        <!-- Daily Leaderboard -->
+        <div id="dailyLeaderboard">
+            <h3>Daily Leaderboard</h3>
+            <ul id="dailyScores">
+                <!-- Daily scores will be listed here -->
+            </ul>
+        </div>
+
+        <!-- Weekly Leaderboard -->
+        <div id="weeklyLeaderboard">
+            <h3>Weekly Leaderboard</h3>
+            <ul id="weeklyScores">
+                <!-- Weekly scores will be listed here -->
+            </ul>
+        </div>
+
+        <!-- Monthly Leaderboard -->
+        <div id="monthlyLeaderboard">
+            <h3>Monthly Leaderboard</h3>
+            <ul id="monthlyScores">
+                <!-- Monthly scores will be listed here -->
+            </ul>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('scoreForm');
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                submitScore();
+            });
+            loadLeaderboards();
+        });
+    
+        function submitScore() {
+            const name = document.getElementById('name').value;
+            const score = document.getElementById('score').value;
+    
+            fetch('/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: name, score: score }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                loadLeaderboards();  // Reload leaderboards after submission
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    
+        function loadLeaderboards() {
+            // Load daily, weekly, and monthly leaderboards
+            ['daily', 'weekly', 'monthly'].forEach(period => {
+                fetch(`/leaderboard/${period}`)
+                .then(response => response.json())
+                .then(data => {
+                    updateLeaderboardUI(period, data);
+                });
+            });
+        }
+    
+        function updateLeaderboardUI(period, scores) {
+            const ul = document.getElementById(`${period}Scores`);
+            ul.innerHTML = '';  // Clear current list
+            scores.forEach(score => {
+                const li = document.createElement('li');
+                li.textContent = `${score.name}: Total Score - ${score.total_score}, Games Played - ${score.games_played}, Average Score - ${score.average_score.toFixed(2)}`;
+                ul.appendChild(li);
+            });
+        }
+    </script>
+    
+</body>
+</html>
+
