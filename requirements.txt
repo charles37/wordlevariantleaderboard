@@ -1,5 +1,7 @@
 pandas
+signalbot
 flask
 requests
 gunicorn
 Flask-SQLAlchemy
+signalbot
