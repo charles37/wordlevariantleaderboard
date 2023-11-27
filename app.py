@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from datetime import datetime, timedelta
+import os
 
 # Initialize Flask app and configure the database
 app = Flask(__name__)
@@ -62,7 +63,8 @@ def get_leaderboard(period):
     return jsonify(formatted_leaderboard)
 
 if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
     with app.app_context():
         db.drop_all()  # Drop all tables
         db.create_all()  # Create database tables within the app context
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=port, debug=True)
