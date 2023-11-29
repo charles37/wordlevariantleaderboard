@@ -13,8 +13,10 @@ class PingCommand(Command):
             print(context_str)  # Print the context in the Python console
 
             # Send the context information back as a response in Signal
-            await c.send(f"Context:\n{context_str}")
-            await c.send("Pong")
+            #await c.send(f"Context:\n{context_str}")
+            #await c.send("Pong")
+            
+            await c.reply("Pong")
 
 
 if __name__ == "__main__":

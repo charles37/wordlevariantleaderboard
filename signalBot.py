@@ -37,13 +37,12 @@ class TradleScoreCommand(Command):
                     'score': score
                 })
                 # print the full response object
-                print(response)
+                #print(response)
 
                 response_str = json.dumps(response.__dict__, indent=4, default=str)
                 print(response_str)  # Print the context in the Python console
 
-                await c.reply(f"TradleBot Submitting score {score} for {name}... visit www.wordlevariantleaderboard.com to see scores")
-
+                await c.send(f"TradleBot Submitting score {score} for {name}... visit www.wordlevariantleaderboard.com to see scores")
 
                 if response.status_code == 201:
                     await c.reply("Score submitted successfully.")
